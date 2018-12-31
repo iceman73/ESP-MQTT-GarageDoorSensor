@@ -358,15 +358,20 @@ void reconnect() {
 void check_door_status() {
 
   // ---- Door 1 ----
+  digitalWrite(DOOR_TRIG_PIN, LOW);
+  delayMicroseconds(5);
   int distance = sonar[0].ping_cm();
   byte state = getState(distance);
   delay(VERIFICATION_INTERVAL);
   byte stateVerify = getState(sonar[0].ping_cm());
+  delay(VERIFICATION_INTERVAL);
+  byte stateVerify2 = getState(sonar[0].ping_cm());
+  
 
   Serial.print(distance);
   Serial.print(".");
 
-  if ((distance > 0) && (state == stateVerify) && (state != getState(door1_lastDistanceValue))) {
+  if ((distance > 0) && (state == stateVerify) && (state == stateVerify2) && (state != getState(door1_lastDistanceValue))) {
     digitalWrite(LED_BUILTIN, LOW);     // Turn the status LED on
     door1_lastDistanceValue = distance;
     sendState(1);
